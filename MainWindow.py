@@ -1,6 +1,20 @@
 from tkinter import *
 from tkinter import messagebox
 
+"""
+ROCKET GUI Version 0.1
+
+Author: Ken Sodetz
+Since: 10/11/2017
+
+Created for Purdue Orbital Electrical and Software Sub team
+
+Parses and displays input data from a Raspberry Pi 3B to eloquently
+display all pertinent system data (data we can affect)  and environmental 
+data (data we cannot affect). 
+
+"""
+
 # Set window options
 top = Tk()
 top.geometry("600x600")
@@ -37,6 +51,8 @@ verifyOkToLaunch = False  # is the system verified for launch?
 bgColor = "#333333"  # background color
 subFrameColor = "#3C3F41"  # sub frame background color
 standardTextWidth = 18
+standardDataWidth = 10
+angleResult = 0
 
 
 # Function to show abort message box
@@ -61,6 +77,7 @@ def verifyMessageCallBack():
     else:
         verifyOkToLaunch = False
         statusLabelChange("NOT VERIFIED")
+        abortButton.config(state=DISABLED)
 
 
 # ============================ #
@@ -95,34 +112,70 @@ frameRightLabel.place(x=(hxw / 2) / 4 + 20, y=5)
 tempLabel = Label(subFrameLeft, text="Temperature (Celsius): ", fg="white", bg=bgColor, width=standardTextWidth)
 tempLabel.place(x=10, y=40)
 
+# Temperature Data
+tempDataLabel = Label(subFrameLeft, text="NULL", fg="white", bg=bgColor, width=standardDataWidth)
+tempDataLabel.place(x=160, y=40)
+
 # Altitude Label
 altLabel = Label(subFrameRight, text="Altitude (Meters): ", fg="white", bg=bgColor, width=standardTextWidth)
 altLabel.place(x=10, y=40)
+
+# Altitude Data
+altDataLabel = Label(subFrameRight, text="NULL", fg="white", bg=bgColor, width=standardDataWidth)
+altDataLabel.place(x=160, y=40)
 
 # Pressure Label
 pressureLabel = Label(subFrameLeft, text="Pressure (kPa): ", fg="white", bg=bgColor, width=standardTextWidth)
 pressureLabel.place(x=10, y=80)
 
+# Pressure Data
+pressureDataLabel = Label(subFrameLeft, text="NULL", fg="white", bg=bgColor, width=standardDataWidth)
+pressureDataLabel.place(x=160, y=80)
+
 # Cardinal Direction Label
 cardinalLabel = Label(subFrameRight, text="Direction (Degrees): ", fg="white", bg=bgColor, width=standardTextWidth)
 cardinalLabel.place(x=10, y=80)
+
+# Cardinal Direction Data
+cardinalDataLabel = Label(subFrameRight, text="NULL", fg="white", bg=bgColor, width=standardDataWidth)
+cardinalDataLabel.place(x=160, y=80)
 
 # Humidity Label
 humidLabel = Label(subFrameLeft, text="Humidity (Percent): ", fg="white", bg=bgColor, width=standardTextWidth)
 humidLabel.place(x=10, y=120)
 
+# Humidity Data
+humidityDataLabel = Label(subFrameLeft, text="NULL", fg="white", bg=bgColor, width=standardDataWidth)
+humidityDataLabel.place(x=160, y=120)
+
 # Acceleration Label
 accLabel = Label(subFrameRight, text="Acceleration (M/s/s): ", fg="white", bg=bgColor, width=standardTextWidth)
 accLabel.place(x=10, y=120)
+
+# Acceleration Data
+accDataLabel = Label(subFrameRight, text="NULL", fg="white", bg=bgColor, width=standardDataWidth)
+accDataLabel.place(x=160, y=120)
 
 # Velocity Label
 velocityLabel = Label(subFrameRight, text="Velocity (M/s): ", fg="white", bg=bgColor, width=standardTextWidth)
 velocityLabel.place(x=10, y=160)
 
+# Velocity Data
+velocityDataLabel = Label(subFrameRight, text="NULL", fg="white", bg=bgColor, width=standardDataWidth)
+velocityDataLabel.place(x=160, y=160)
+
 # Angle Label
 angleLabel = Label(subFrameRight, text="Angle (Degrees): ", fg="white", bg=bgColor, width=standardTextWidth)
 angleLabel.place(x=10, y=200)
 
+# Angle Data
+angleDataLabel = Label(subFrameRight, text="NULL", fg="white", bg=bgColor, width=standardDataWidth)
+angleDataLabel.place(x=160, y=200)
+
+
+# ============================ #
+# == UPDATE LABEL FUNCTIONS == #
+# ============================ #
 
 # Function to change status label
 def statusLabelChange(change_to):
@@ -138,6 +191,10 @@ def statusLabelChange(change_to):
 # Function to update Environment Data
 # def updateEnvironment ():
 
+# ============================ #
+# ==== BUTTONS AND ENTRIES === #
+# ============================ #
+
 # Abort Mission Button
 abortButton = Button(subFrameBottom, text="ABORT MISSION", state=DISABLED, bg="red", command=abortMessageCallBack,
                      width="20")
@@ -147,6 +204,14 @@ abortButton.place(x=100, y=55)
 verifyButton = Button(subFrameBottom, text="VERIFY LAUNCH", bg="green", command=verifyMessageCallBack, cursor="shuttle",
                       width="20")
 verifyButton.place(x=100, y=125)
+
+# Angle input
+angleInput = Entry(subFrameRight, bd=5, bg=bgColor, fg="white", width=standardDataWidth, textvariable=angleResult)
+angleInput.place(x=40, y=240)
+
+# Get angle Input Button
+angleInputButton = Button(subFrameRight, text="ENTER", width=8)
+angleInputButton.place(x=160, y=240)
 
 # Start window
 top.mainloop()
