@@ -10,8 +10,8 @@ Since: 10/11/2017
 Created for Purdue Orbital Electrical and Software Sub team
 
 Parses and displays input data from a Raspberry Pi 3B to eloquently
-display all pertinent system data (data we can affect)  and environmental 
-data (data we cannot affect). 
+display all pertinent system data (data that can be changed)  and environmental 
+data (data that cannot be changed). 
 
 """
 
@@ -172,6 +172,11 @@ angleLabel.place(x=10, y=200)
 angleDataLabel = Label(subFrameRight, text="NULL", fg="white", bg=bgColor, width=standardDataWidth)
 angleDataLabel.place(x=160, y=200)
 
+# Angle Entry Label
+angleEntryLabel = Label(subFrameLeft, text="Positive angle between 'X' and 'Y'", fg="white", bg=subFrameColor,
+                        width=26)
+angleEntryLabel.place(x=40, y=230)
+
 
 # ============================ #
 # == UPDATE LABEL FUNCTIONS == #
@@ -205,13 +210,13 @@ verifyButton = Button(subFrameBottom, text="VERIFY LAUNCH", bg="green", command=
                       width="20")
 verifyButton.place(x=100, y=125)
 
-# Angle input
-angleInput = Entry(subFrameRight, bd=5, bg=bgColor, fg="white", width=standardDataWidth, textvariable=angleResult)
-angleInput.place(x=40, y=240)
+# Angle Entry
+angleEntry = Entry(subFrameLeft, bd=5, bg=bgColor, fg="white", width=standardDataWidth, textvariable=angleResult)
+angleEntry.place(x=40, y=260)
 
 # Get angle Input Button
-angleInputButton = Button(subFrameRight, text="ENTER", width=8)
-angleInputButton.place(x=160, y=240)
+angleInputButton = Button(subFrameLeft, text="ENTER", width=8)
+angleInputButton.place(x=160, y=260)
 
 # Start window
 top.mainloop()
