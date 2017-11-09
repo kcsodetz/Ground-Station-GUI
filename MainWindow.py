@@ -141,7 +141,7 @@ pressureDataLabel = Label(subFrameLeft, text="NULL", fg="white", bg=bgColor, wid
 pressureDataLabel.place(x=160, y=80)
 
 # Cardinal Direction Label
-cardinalLabel = Label(subFrameRight, text="Direction (Degrees): ", fg="white", bg=bgColor, width=standardTextWidth)
+cardinalLabel = Label(subFrameRight, text="Direction (°): ", fg="white", bg=bgColor, width=standardTextWidth)
 cardinalLabel.place(x=10, y=80)
 
 # Cardinal Direction Data
@@ -173,7 +173,7 @@ velocityDataLabel = Label(subFrameRight, text="NULL", fg="white", bg=bgColor, wi
 velocityDataLabel.place(x=160, y=160)
 
 # Angle Label
-angleLabel = Label(subFrameRight, text="Angle (Degrees): ", fg="white", bg=bgColor, width=standardTextWidth)
+angleLabel = Label(subFrameRight, text="Angle (°): ", fg="white", bg=bgColor, width=standardTextWidth)
 angleLabel.place(x=10, y=200)
 
 # Angle Data
@@ -181,7 +181,7 @@ angleDataLabel = Label(subFrameRight, text="NULL", fg="white", bg=bgColor, width
 angleDataLabel.place(x=160, y=200)
 
 # Angle Entry Label
-angleEntryLabel = Label(subFrameLeft, text="Positive angle between '30' and '75'", fg="white", bg=subFrameColor,
+angleEntryLabel = Label(subFrameLeft, text="Positive angle between 30° and 75°", fg="white", bg=subFrameColor,
                         width=26)
 angleEntryLabel.place(x=40, y=230)
 
