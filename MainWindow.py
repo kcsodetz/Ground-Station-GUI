@@ -41,44 +41,52 @@ subFrameRight.place(x=hxw / 2 + 5, y=5)
 subFrameBottom = Frame(top, bg="#3C3F41", height="200", width=hxw, relief=RAISED)
 subFrameBottom.place(x=0, y=hxw - 285)
 
+
+# ============================ #
+# ==== MENU BAR & COMMANDS === #
+# ============================ #
+
+def donothing():
+    file_window = Toplevel(top)
+    button = Button(file_window, text="Close")
+    button.pack()
+
+def about():
+    about_window = Toplevel(top, height=100, width=100)
+    close_button = Button(about_window, text="Close")
+    close_button.pack()
+
+
+menubar = Menu(top)
+filemenu = Menu(menubar, tearoff=0)
+filemenu.add_command(label="Restart", command=donothing)
+filemenu.add_command(label="Close", command=donothing)
+
+filemenu.add_separator()
+
+filemenu.add_command(label="Exit", command=top.quit)
+menubar.add_cascade(label="File", menu=filemenu)
+
+helpmenu = Menu(menubar, tearoff=0)
+helpmenu.add_command(label="Help Index", command=donothing)
+helpmenu.add_command(label="About...", command=donothing)
+menubar.add_cascade(label="Help", menu=helpmenu)
+
+top.config(menu=menubar)
+
+
 # ============================ #
 # ===== GLOBAL VARIABLES ===== #
 # ============================ #
 
-isLaunched = False  # has the rocket launched?
-hasAborted = False  # has the process been aborted?
-verifyOkToLaunch = False  # is the system verified for launch?
+is_launched = False  # has the rocket launched?
+has_aborted = False  # has the process been aborted?
+verify_ok_to_launch = False  # is the system verified for launch?
 bgColor = "#333333"  # background color
 subFrameColor = "#3C3F41"  # sub frame background color
-standardTextWidth = 18
-standardDataWidth = 10
-angleResult = 0
-
-
-# Function to show abort message box
-def abortMessageCallBack():
-    abort_response = messagebox.askyesno("Abort Mission?", "Do you really want to abort the mission?")
-    if abort_response:
-        hasAborted = True
-        verifyOkToLaunch = False
-        statusLabelChange("MISSION ABORTED")
-        abortButton.config(state=DISABLED)
-    else:
-        hasAborted = False
-
-
-# Function to show verify message box
-def verifyMessageCallBack():
-    verify_response = messagebox.askyesno("Verify Launch", "Do you want to verify for launch?")
-    if verify_response:
-        verifyOkToLaunch = True
-        abortButton.config(state=NORMAL)
-        statusLabelChange("VERIFIED")
-    else:
-        verifyOkToLaunch = False
-        statusLabelChange("NOT VERIFIED")
-        abortButton.config(state=DISABLED)
-
+standardTextWidth = 18  # standard text width
+standardDataWidth = 10  # standard data width
+angle_result = "null"
 
 # ============================ #
 # ========== LABELS ========== #
@@ -173,7 +181,7 @@ angleDataLabel = Label(subFrameRight, text="NULL", fg="white", bg=bgColor, width
 angleDataLabel.place(x=160, y=200)
 
 # Angle Entry Label
-angleEntryLabel = Label(subFrameLeft, text="Positive angle between 'X' and 'Y'", fg="white", bg=subFrameColor,
+angleEntryLabel = Label(subFrameLeft, text="Positive angle between '30' and '75'", fg="white", bg=subFrameColor,
                         width=26)
 angleEntryLabel.place(x=40, y=230)
 
@@ -191,6 +199,38 @@ def statusLabelChange(change_to):
         statusLabel.config(fg="orange")
     elif change_to == "MISSION ABORTED":
         statusLabel.config(fg="red")
+
+
+# Function to show abort message box
+def abortMessageCallBack():
+    abort_response = messagebox.askyesno("Abort Mission?", "Do you really want to abort the mission?")
+    if abort_response:
+        has_aborted = True
+        verify_ok_to_launch = False
+        statusLabelChange("MISSION ABORTED")
+        abortButton.config(state=DISABLED)
+    else:
+        has_aborted = False
+
+
+# Function to show verify message box
+def verifyMessageCallBack():
+    verify_response = messagebox.askyesno("Verify Launch", "Do you want to verify for launch?")
+    if verify_response:
+        verify_ok_to_launch = True
+        abortButton.config(state=NORMAL)
+        statusLabelChange("VERIFIED")
+    else:
+        verify_ok_to_launch = False
+        statusLabelChange("NOT VERIFIED")
+        abortButton.config(state=DISABLED)
+
+
+def getAngle():
+    angle_result = angleEntry.get()
+    angle_result = float(angle_result)
+    if 30.0 <= angle_result <= 75.0:
+        angleDataLabel.config(text=angle_result)
 
 
 # Function to update Environment Data
@@ -211,11 +251,11 @@ verifyButton = Button(subFrameBottom, text="VERIFY LAUNCH", bg="green", command=
 verifyButton.place(x=100, y=125)
 
 # Angle Entry
-angleEntry = Entry(subFrameLeft, bd=5, bg=bgColor, fg="white", width=standardDataWidth, textvariable=angleResult)
+angleEntry = Entry(subFrameLeft, bd=5, bg=bgColor, fg="white", width=standardDataWidth, textvariable=angle_result)
 angleEntry.place(x=40, y=260)
 
-# Get angle Input Button
-angleInputButton = Button(subFrameLeft, text="ENTER", width=8)
+# Get Angle Input Button
+angleInputButton = Button(subFrameLeft, text="ENTER", width=8, command=getAngle)
 angleInputButton.place(x=160, y=260)
 
 # Start window
