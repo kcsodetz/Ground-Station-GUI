@@ -9,9 +9,8 @@ Since: 10/11/2017
 
 Created for Purdue Orbital Electrical and Software Sub team
 
-
-Parses and displays input data from a Raspberry Pi 3B to eloquently
-display all pertinent system data (data that can be changed)  and environmental 
+Parses and displays data from the a Raspberry Pi 3 to verbosely
+display all pertinent system data (data that can be changed) and environmental 
 data (data that cannot be changed). 
 
 """
@@ -52,29 +51,29 @@ def donothing():
     button = Button(file_window, text="Close")
     button.pack()
 
+
 def about():
     about_window = Toplevel(top, height=100, width=100)
     close_button = Button(about_window, text="Close")
     close_button.pack()
 
 
-menubar = Menu(top)
-filemenu = Menu(menubar, tearoff=0)
-filemenu.add_command(label="Restart", command=donothing)
-filemenu.add_command(label="Close", command=donothing)
+menuBar = Menu(top)
+fileMenu = Menu(menuBar, tearoff=0)
+fileMenu.add_command(label="Restart", command=donothing)
+fileMenu.add_command(label="Close", command=donothing)
 
-filemenu.add_separator()
+fileMenu.add_separator()
 
-filemenu.add_command(label="Exit", command=top.quit)
-menubar.add_cascade(label="File", menu=filemenu)
+fileMenu.add_command(label="Exit", command=top.quit)
+menuBar.add_cascade(label="File", menu=fileMenu)
 
-helpmenu = Menu(menubar, tearoff=0)
+helpmenu = Menu(menuBar, tearoff=0)
 helpmenu.add_command(label="Help Index", command=donothing)
 helpmenu.add_command(label="About...", command=donothing)
-menubar.add_cascade(label="Help", menu=helpmenu)
+menuBar.add_cascade(label="Help", menu=helpmenu)
 
-top.config(menu=menubar)
-
+top.config(menu=menuBar)
 
 # ============================ #
 # ===== GLOBAL VARIABLES ===== #
@@ -234,6 +233,7 @@ def getAngle():
         angleDataLabel.config(text=angle_result)
 
 
+# TODO: Implement update function for environment data
 # Function to update Environment Data
 # def updateEnvironment ():
 
