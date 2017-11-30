@@ -88,6 +88,20 @@ standardTextWidth = 18  # standard text width
 standardDataWidth = 10  # standard data width
 angle_result = "null"
 
+# Environmental Variables (currently placeholders)
+temperature = "26.6"
+pressure = "101.325"
+humidity = "67.2"
+
+# System Variables (currently placeholders)
+altitude = "1024.45"
+direction = "36"
+acceleration = "3.06"
+velocity = "5.01"
+horizontalAngle = "46"
+
+
+
 # ============================ #
 # ========== LABELS ========== #
 # ============================ #
@@ -121,7 +135,7 @@ tempLabel = Label(subFrameLeft, text="Temperature (Celsius): ", fg="white", bg=b
 tempLabel.place(x=10, y=40)
 
 # Temperature Data
-tempDataLabel = Label(subFrameLeft, text="NULL", fg="white", bg=bgColor, width=standardDataWidth)
+tempDataLabel = Label(subFrameLeft, text=temperature, fg="white", bg=bgColor, width=standardDataWidth)
 tempDataLabel.place(x=160, y=40)
 
 # Altitude Label
@@ -129,7 +143,7 @@ altLabel = Label(subFrameRight, text="Altitude (Meters): ", fg="white", bg=bgCol
 altLabel.place(x=10, y=40)
 
 # Altitude Data
-altDataLabel = Label(subFrameRight, text="NULL", fg="white", bg=bgColor, width=standardDataWidth)
+altDataLabel = Label(subFrameRight, text=altitude, fg="white", bg=bgColor, width=standardDataWidth)
 altDataLabel.place(x=160, y=40)
 
 # Pressure Label
@@ -137,7 +151,7 @@ pressureLabel = Label(subFrameLeft, text="Pressure (kPa): ", fg="white", bg=bgCo
 pressureLabel.place(x=10, y=80)
 
 # Pressure Data
-pressureDataLabel = Label(subFrameLeft, text="NULL", fg="white", bg=bgColor, width=standardDataWidth)
+pressureDataLabel = Label(subFrameLeft, text=pressure, fg="white", bg=bgColor, width=standardDataWidth)
 pressureDataLabel.place(x=160, y=80)
 
 # Cardinal Direction Label
@@ -145,7 +159,7 @@ cardinalLabel = Label(subFrameRight, text="Direction (°): ", fg="white", bg=bgC
 cardinalLabel.place(x=10, y=80)
 
 # Cardinal Direction Data
-cardinalDataLabel = Label(subFrameRight, text="NULL", fg="white", bg=bgColor, width=standardDataWidth)
+cardinalDataLabel = Label(subFrameRight, text=direction, fg="white", bg=bgColor, width=standardDataWidth)
 cardinalDataLabel.place(x=160, y=80)
 
 # Humidity Label
@@ -153,7 +167,7 @@ humidLabel = Label(subFrameLeft, text="Humidity (Percent): ", fg="white", bg=bgC
 humidLabel.place(x=10, y=120)
 
 # Humidity Data
-humidityDataLabel = Label(subFrameLeft, text="NULL", fg="white", bg=bgColor, width=standardDataWidth)
+humidityDataLabel = Label(subFrameLeft, text=humidity, fg="white", bg=bgColor, width=standardDataWidth)
 humidityDataLabel.place(x=160, y=120)
 
 # Acceleration Label
@@ -161,7 +175,7 @@ accLabel = Label(subFrameRight, text="Acceleration (M/s/s): ", fg="white", bg=bg
 accLabel.place(x=10, y=120)
 
 # Acceleration Data
-accDataLabel = Label(subFrameRight, text="NULL", fg="white", bg=bgColor, width=standardDataWidth)
+accDataLabel = Label(subFrameRight, text=acceleration, fg="white", bg=bgColor, width=standardDataWidth)
 accDataLabel.place(x=160, y=120)
 
 # Velocity Label
@@ -169,7 +183,7 @@ velocityLabel = Label(subFrameRight, text="Velocity (M/s): ", fg="white", bg=bgC
 velocityLabel.place(x=10, y=160)
 
 # Velocity Data
-velocityDataLabel = Label(subFrameRight, text="NULL", fg="white", bg=bgColor, width=standardDataWidth)
+velocityDataLabel = Label(subFrameRight, text=velocity, fg="white", bg=bgColor, width=standardDataWidth)
 velocityDataLabel.place(x=160, y=160)
 
 # Angle Label
@@ -177,7 +191,7 @@ angleLabel = Label(subFrameRight, text="Angle (°): ", fg="white", bg=bgColor, w
 angleLabel.place(x=10, y=200)
 
 # Angle Data
-angleDataLabel = Label(subFrameRight, text="NULL", fg="white", bg=bgColor, width=standardDataWidth)
+angleDataLabel = Label(subFrameRight, text=horizontalAngle, fg="white", bg=bgColor, width=standardDataWidth)
 angleDataLabel.place(x=160, y=200)
 
 # Angle Entry Label
