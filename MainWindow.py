@@ -53,8 +53,8 @@ aboutText = "ROCKET GUI Version 0.1\n\n" \
             "Author: Ken Sodetz\n" \
             "Since: 10/11/2017\n\n" \
             "Created for Purdue Orbital Electrical and Software Sub team\n\n" \
-            "Parses and displays data from the a Raspberry Pi 3 to verbosely display all\npertinent system data (data " \
-            "that can be changed) and environmental data\n(data that cannot be changed)"
+            "Parses and displays data from the a Raspberry Pi 3 to verbosely display all\npertinent system data " \
+            "(data that can be changed) and environmental data\n(data that cannot be changed)"
 
 
 # Temp menu item
@@ -96,7 +96,7 @@ menuBar = Menu(top)
 # File Menu
 fileMenu = Menu(menuBar, tearoff=0)
 fileMenu.add_command(label="Restart", command=restart_program)
-fileMenu.add_command(label="Close", command=doNothing)
+fileMenu.add_command(label="Reset Values", command=doNothing)
 fileMenu.add_separator()
 fileMenu.add_command(label="Exit", command=top.quit)
 menuBar.add_cascade(label="File", menu=fileMenu)
@@ -283,7 +283,9 @@ def statusLabelChange(change_to):
 def abortMessageCallBack():
     abort_response = messagebox.askyesno("Abort Mission?", "Do you really want to abort the mission?")
     if abort_response:
+        global has_aborted
         has_aborted = True
+        global verify_ok_to_launch
         verify_ok_to_launch = False
         statusLabelChange("MISSION ABORTED")
         abortButton.config(state=DISABLED)
@@ -296,6 +298,7 @@ def abortMessageCallBack():
 def verifyMessageCallBack():
     verify_response = messagebox.askyesno("Verify Launch", "Do you want to verify for launch?")
     if verify_response:
+        global verify_ok_to_launch
         verify_ok_to_launch = True
         abortButton.config(state=NORMAL)
         statusLabelChange("VERIFIED")
