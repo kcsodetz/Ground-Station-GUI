@@ -135,7 +135,7 @@ def log(status):
     fo.write("direction = " + repr(direction) + "\n")
     fo.write("acceleration = " + repr(acceleration) + "\n")
     fo.write("velocity = " + repr(velocity) + "\n")
-    fo.write("horizontalAngle = " + repr(horizontalAngle) + "\n")
+    fo.write("horizontalAngle = " + repr(angle_result) + "\n")
     fo.write("----------LOGS END-----------\n")
     fo.write("-----------------------------\n\n")
     fo.close()
@@ -152,7 +152,7 @@ bgColor = "#333333"  # background color
 subFrameColor = "#3C3F41"  # sub frame background color
 standardTextWidth = 18  # standard text width
 standardDataWidth = 10  # standard data width
-angle_result = "null"
+# angle_result = "null"
 
 # Environmental Variables (currently placeholders)
 temperature = 26.6
@@ -164,7 +164,7 @@ altitude = 1024.45
 direction = 36
 acceleration = 3.06
 velocity = 5.01
-horizontalAngle = 46.0
+angle_result = 46.0
 
 # ============================ #
 # ========== LABELS ========== #
@@ -255,7 +255,7 @@ angleLabel = Label(subFrameRight, text="Angle (°): ", fg="white", bg=bgColor, w
 angleLabel.place(x=10, y=200)
 
 # Angle Data
-angleDataLabel = Label(subFrameRight, text=horizontalAngle, fg="white", bg=bgColor, width=standardDataWidth)
+angleDataLabel = Label(subFrameRight, text=angle_result, fg="white", bg=bgColor, width=standardDataWidth)
 angleDataLabel.place(x=160, y=200)
 
 # Angle Entry Label
@@ -309,6 +309,7 @@ def verifyMessageCallBack():
 
 def getAngle():
     this_angle_result = angleEntry.get()
+    global angle_result
     angle_result = float(this_angle_result)
     if 30.0 <= angle_result <= 75.0:
         angleDataLabel.config(text=angle_result)
