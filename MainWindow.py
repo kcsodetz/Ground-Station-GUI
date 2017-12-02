@@ -1,3 +1,6 @@
+import datetime
+import os
+import time
 from tkinter import *
 from tkinter import messagebox
 
@@ -41,39 +44,102 @@ subFrameRight.place(x=hxw / 2 + 5, y=5)
 subFrameBottom = Frame(top, bg="#3C3F41", height="200", width=hxw, relief=RAISED)
 subFrameBottom.place(x=0, y=hxw - 285)
 
-
 # ============================ #
 # ==== MENU BAR & COMMANDS === #
 # ============================ #
 
-def donothing():
+# Text for 'About' menu item
+aboutText = "ROCKET GUI Version 0.1\n\n" \
+            "Author: Ken Sodetz\n" \
+            "Since: 10/11/2017\n\n" \
+            "Created for Purdue Orbital Electrical and Software Sub team\n\n" \
+            "Parses and displays data from the a Raspberry Pi 3 to verbosely display all\npertinent system data (data " \
+            "that can be changed) and environmental data\n(data that cannot be changed)"
+
+
+# Temp menu item
+def doNothing():
     file_window = Toplevel(top)
-    button = Button(file_window, text="Close")
+    button = Button(file_window, text="Close", command=lambda: close_window(file_window))
     button.pack()
 
 
+# About menu item method
 def about():
-    about_window = Toplevel(top, height=100, width=100)
-    close_button = Button(about_window, text="Close")
-    close_button.pack()
+    about_window = Toplevel(top)
+    about_window.resizable(width=False, height=False)
+    text = Text(about_window)
+    text.insert(INSERT, aboutText)
+    text.config(state=DISABLED)
+    text.pack()
+    top.img = img = PhotoImage(file="PurdueOrbitalLogo.gif")
+    logo = Label(about_window, image=img)
+    logo.place(x=220, y=175)
+    button = Button(about_window, text="Close", command=lambda: close_window(about_window))
+    button.pack()
 
 
+# Close menu window method
+def close_window(window):
+    window.destroy()
+
+
+# Restart program method
+def restart_program():
+    python = sys.executable
+    os.execl(python, python, *sys.argv)
+
+
+# Menu Bar
 menuBar = Menu(top)
+
+# File Menu
 fileMenu = Menu(menuBar, tearoff=0)
-fileMenu.add_command(label="Restart", command=donothing)
-fileMenu.add_command(label="Close", command=donothing)
-
+fileMenu.add_command(label="Restart", command=restart_program)
+fileMenu.add_command(label="Close", command=doNothing)
 fileMenu.add_separator()
-
 fileMenu.add_command(label="Exit", command=top.quit)
 menuBar.add_cascade(label="File", menu=fileMenu)
 
-helpmenu = Menu(menuBar, tearoff=0)
-helpmenu.add_command(label="Help Index", command=donothing)
-helpmenu.add_command(label="About...", command=donothing)
-menuBar.add_cascade(label="Help", menu=helpmenu)
+# Help Menu
+helpMenu = Menu(menuBar, tearoff=0)
+helpMenu.add_command(label="Help Index", command=doNothing)
+helpMenu.add_separator()
+helpMenu.add_command(label="About", command=about)
+menuBar.add_cascade(label="Help", menu=helpMenu)
 
 top.config(menu=menuBar)
+
+
+# ============================ #
+# ======= STATUS LOGS ======== #
+# ============================ #
+
+def log(status):
+    fo = open("status_log.txt", "a")
+    currentDate = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
+    if status == "ABORT":
+        fo.write("-------MISSION ABORTED-------\n")
+    elif status == "VERIFIED":
+        fo.write("-------STATUS VERIFIED-------\n")
+    else:
+        fo.write("-----STATUS NOT VERIFIED-----\n")
+
+    fo.write("TIMESTAMP:" + currentDate + "\n")
+    fo.write("*****************************\n")
+    fo.write("----------LOGS START---------\n")
+    fo.write("temperature = " + repr(temperature) + "\n")
+    fo.write("pressure = " + repr(pressure) + "\n")
+    fo.write("humidity = " + repr(humidity) + "\n")
+    fo.write("altitude = " + repr(altitude) + "\n")
+    fo.write("direction = " + repr(direction) + "\n")
+    fo.write("acceleration = " + repr(acceleration) + "\n")
+    fo.write("velocity = " + repr(velocity) + "\n")
+    fo.write("horizontalAngle = " + repr(horizontalAngle) + "\n")
+    fo.write("----------LOGS END-----------\n")
+    fo.write("-----------------------------\n\n")
+    fo.close()
+
 
 # ============================ #
 # ===== GLOBAL VARIABLES ===== #
@@ -89,16 +155,16 @@ standardDataWidth = 10  # standard data width
 angle_result = "null"
 
 # Environmental Variables (currently placeholders)
-temperature = "26.6"
-pressure = "101.325"
-humidity = "67.2"
+temperature = 26.6
+pressure = 101.325
+humidity = 67.2
 
 # System Variables (currently placeholders)
-altitude = "1024.45"
-direction = "36"
-acceleration = "3.06"
-velocity = "5.01"
-horizontalAngle = "46"
+altitude = 1024.45
+direction = 36
+acceleration = 3.06
+velocity = 5.01
+horizontalAngle = 46.0
 
 # ============================ #
 # ========== LABELS ========== #
@@ -221,6 +287,7 @@ def abortMessageCallBack():
         verify_ok_to_launch = False
         statusLabelChange("MISSION ABORTED")
         abortButton.config(state=DISABLED)
+        log("ABORT")
     else:
         has_aborted = False
 
@@ -232,15 +299,17 @@ def verifyMessageCallBack():
         verify_ok_to_launch = True
         abortButton.config(state=NORMAL)
         statusLabelChange("VERIFIED")
+        log("VERIFIED")
     else:
         verify_ok_to_launch = False
         statusLabelChange("NOT VERIFIED")
         abortButton.config(state=DISABLED)
+        log("NOT")
 
 
 def getAngle():
-    angle_result = angleEntry.get()
-    angle_result = float(angle_result)
+    this_angle_result = angleEntry.get()
+    angle_result = float(this_angle_result)
     if 30.0 <= angle_result <= 75.0:
         angleDataLabel.config(text=angle_result)
 
