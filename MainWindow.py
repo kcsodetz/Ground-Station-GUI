@@ -64,17 +64,29 @@ def doNothing():
     button.pack()
 
 
+# Log menu item method
+def log_menu():
+    log_window = Toplevel(top)
+    log_window.title("Log")
+    loggedLabel = Label(log_window, text="The current variables have been logged in 'status_log.txt'")
+    loggedLabel.pack()
+    button = Button(log_window, text="Close", command=lambda: close_window(log_window))
+    button.pack()
+    log("MANUAL")
+
+
 # About menu item method
 def about():
     about_window = Toplevel(top)
+    about_window.title("About")
     about_window.resizable(width=False, height=False)
     text = Text(about_window)
     text.insert(INSERT, aboutText)
     text.config(state=DISABLED)
     text.pack()
-    top.img = img = PhotoImage(file="PurdueOrbitalLogo.gif")
+    top.img = img = PhotoImage(file="PurdueOrbitalLogoSmall.gif")
     logo = Label(about_window, image=img)
-    logo.place(x=220, y=175)
+    logo.place(x=220, y=200)
     button = Button(about_window, text="Close", command=lambda: close_window(about_window))
     button.pack()
 
@@ -90,16 +102,49 @@ def restart_program():
     os.execl(python, python, *sys.argv)
 
 
+# Reset variables window
+def reset_variables_window():
+    reset_window = messagebox.askokcancel("Reset All Variables?", "Are you sure you want to reset all variables?")
+    if reset_window:
+        reset_variables()
+        updateEnvironment()
+
+
+# Reset all variables
+def reset_variables():
+    global temperature
+    temperature = 0.0
+    global pressure
+    pressure = 0.0
+    global humidity
+    humidity = 0.0
+    global altitude
+    altitude = 0.0
+    global direction
+    direction = 0.0
+    global acceleration
+    acceleration = 0.0
+    global velocity
+    velocity = 0.0
+    global angle_result
+    angle_result = "null"
+
+
 # Menu Bar
 menuBar = Menu(top)
 
 # File Menu
 fileMenu = Menu(menuBar, tearoff=0)
 fileMenu.add_command(label="Restart", command=restart_program)
-fileMenu.add_command(label="Reset Values", command=doNothing)
 fileMenu.add_separator()
 fileMenu.add_command(label="Exit", command=top.quit)
 menuBar.add_cascade(label="File", menu=fileMenu)
+
+# Program Menu
+programMenu = Menu(menuBar, tearoff=0)
+programMenu.add_command(label="Reset", command=reset_variables_window)
+programMenu.add_command(label="Log", command=log_menu)
+menuBar.add_cascade(label="Program", menu=programMenu)
 
 # Help Menu
 helpMenu = Menu(menuBar, tearoff=0)
@@ -122,6 +167,8 @@ def log(status):
         fo.write("-------MISSION ABORTED-------\n")
     elif status == "VERIFIED":
         fo.write("-------STATUS VERIFIED-------\n")
+    elif status == "MANUAL":
+        fo.write("-----MANUAL LOG INVOKED------\n")
     else:
         fo.write("-----STATUS NOT VERIFIED-----\n")
 
@@ -320,7 +367,16 @@ def getAngle():
 
 # TODO: Implement update function for environment data
 # Function to update Environment Data
-# def updateEnvironment ():
+def updateEnvironment():
+    tempDataLabel.config(text=temperature)
+    pressureDataLabel.config(text=pressure)
+    humidityDataLabel.config(text=humidity)
+    altDataLabel.config(text=altitude)
+    cardinalDataLabel.config(text=direction)
+    accDataLabel.config(text=acceleration)
+    velocityDataLabel.config(text=velocity)
+    angleDataLabel.config(text=angle_result)
+
 
 # ============================ #
 # ==== BUTTONS AND ENTRIES === #
