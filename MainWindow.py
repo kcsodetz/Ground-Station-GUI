@@ -99,6 +99,7 @@ def close_window(window):
 # Restart program method
 def restart_program():
     python = sys.executable
+    log("RESTART")
     os.execl(python, python, *sys.argv)
 
 
@@ -106,8 +107,13 @@ def restart_program():
 def reset_variables_window():
     reset_window = messagebox.askokcancel("Reset All Variables?", "Are you sure you want to reset all variables?")
     if reset_window:
+        log("RESET")
         reset_variables()
         updateEnvironment()
+        global verify_ok_to_launch
+        verify_ok_to_launch = False
+        statusLabelChange("NOT VERIFIED")
+        abortButton.config(state=DISABLED)
 
 
 # Reset all variables
@@ -169,6 +175,10 @@ def log(status):
         fo.write("-------STATUS VERIFIED-------\n")
     elif status == "MANUAL":
         fo.write("-----MANUAL LOG INVOKED------\n")
+    elif status == "RESET":
+        fo.write("-------VARIABLES RESET-------\n")
+    elif status == "RESTART":
+        fo.write("-------PROGRAM RESTART-------\n")
     else:
         fo.write("-----STATUS NOT VERIFIED-----\n")
 
@@ -217,13 +227,13 @@ angle_result = 46.0
 # ========== LABELS ========== #
 # ============================ #
 
-# Abort Mission Label
-abortLabel = Label(subFrameBottom, text="Abort Mission:", bg=bgColor, fg="white")
-abortLabel.place(x=10, y=55)
-
-# Verify Launch Label
-verifyLabel = Label(subFrameBottom, text="Verify Launch:", bg=bgColor, fg="white")
-verifyLabel.place(x=10, y=125)
+# # Abort Mission Label
+# abortLabel = Label(subFrameBottom, text="Abort Mission:", bg=bgColor, fg="white")
+# abortLabel.place(x=10, y=55)
+#
+# # Verify Launch Label
+# verifyLabel = Label(subFrameBottom, text="Verify Launch:", bg=bgColor, fg="white")
+# verifyLabel.place(x=10, y=125)
 
 # Status Label to show real time status
 statusLabel = Label(subFrameBottom, text="NOT VERIFIED", fg="orange", bg="#808080", width="20", height="2")
@@ -360,12 +370,12 @@ def verifyMessageCallBack():
 def getAngle():
     this_angle_result = angleEntry.get()
     global angle_result
-    angle_result = float(this_angle_result)
-    if 30.0 <= angle_result <= 75.0:
-        angleDataLabel.config(text=angle_result)
+    if len(angleEntry.get()) > 0:
+        angle_result = float(this_angle_result)
+        if 30.0 <= angle_result <= 75.0:
+            angleDataLabel.config(text=angle_result)
 
 
-# TODO: Implement update function for environment data
 # Function to update Environment Data
 def updateEnvironment():
     tempDataLabel.config(text=temperature)
@@ -383,14 +393,40 @@ def updateEnvironment():
 # ============================ #
 
 # Abort Mission Button
+
+# Info Text Line
+infoText = Label(subFrameBottom, fg="white", bg=bgColor, width=40)
+infoText.place(x=160, y=15)
+
+
+# When mouse hovers over the abort button, show info on the infoText line
+def on_enter_abort(event):
+    infoText.config(text="Abort Mission Button", fg="red")
+
+
+# When mouse hovers over the verify button, show info on the infoText line
+def on_enter_verify(event):
+    infoText.config(text="Verify Mission Button", fg="green")
+
+
+# When mouse leaves, clear infoText line
+def on_leave(event):
+    global infoText
+    infoText.config(text=" ")
+
+
 abortButton = Button(subFrameBottom, text="ABORT MISSION", state=DISABLED, bg="red", command=abortMessageCallBack,
                      width="20")
 abortButton.place(x=100, y=55)
+abortButton.bind("<Enter>", on_enter_abort)
+abortButton.bind("<Leave>", on_leave)
 
 # Verify Launch Button
 verifyButton = Button(subFrameBottom, text="VERIFY LAUNCH", bg="green", command=verifyMessageCallBack, cursor="shuttle",
                       width="20")
 verifyButton.place(x=100, y=125)
+verifyButton.bind("<Enter>", on_enter_verify)
+verifyButton.bind("<Leave>", on_leave)
 
 # Angle Entry
 angleEntry = Entry(subFrameLeft, bd=5, bg=bgColor, fg="white", width=standardDataWidth, textvariable=angle_result)
