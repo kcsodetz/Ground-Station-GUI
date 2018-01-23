@@ -1,6 +1,7 @@
 import datetime
 import os
 import time
+import RPi.GPIO as GPIO
 from tkinter import *
 from tkinter import messagebox
 
@@ -17,6 +18,21 @@ display all pertinent system data (data that can be changed) and environmental
 data (data that cannot be changed). 
 
 """
+# Set up GPIO pins for use
+
+launch_signal = 37 #orange
+on_signal = 35 #yellow
+gui_switch = 7 #white
+
+GPIO.setmode(GPIO.BOARD)
+GPIO.setwarnings(False)
+GPIO.setup(launch_signal, GPIO.IN)
+GPIO.setup(on_signal, GPIO.OUT)
+GPIO.setup(gui_switch, GPIO.OUT)
+
+GPIO.output(on_signal, GPIO.HIGH)
+GPIO.output(on_signal, GPIO.LOW)
+GPIO.output(gui_switch, GPIO.LOW)
 
 # Set window options
 top = Tk()
@@ -99,6 +115,8 @@ def close_window(window):
 # Restart program method
 def restart_program():
     python = sys.executable
+    GPIO.output(gui_switch, GPIO.LOW)
+    GPIO.cleanup()
     log("RESTART")
     os.execl(python, python, *sys.argv)
 
@@ -118,6 +136,7 @@ def reset_variables_window():
 
 # Reset all variables
 def reset_variables():
+    GPIO.output(gui_switch, GPIO.LOW)
     global temperature
     temperature = 0.0
     global pressure
@@ -347,6 +366,7 @@ def abortMessageCallBack():
         statusLabelChange("MISSION ABORTED")
         abortButton.config(state=DISABLED)
         log("ABORT")
+        GPIO.output(gui_switch, GPIO.LOW)
     else:
         has_aborted = False
 
@@ -360,6 +380,7 @@ def verifyMessageCallBack():
         abortButton.config(state=NORMAL)
         statusLabelChange("VERIFIED")
         log("VERIFIED")
+        GPIO.output(gui_switch, GPIO.HIGH)
     else:
         verify_ok_to_launch = False
         statusLabelChange("NOT VERIFIED")
@@ -438,3 +459,4 @@ angleInputButton.place(x=160, y=260)
 
 # Start window
 top.mainloop()
+GPIO.cleanup()
