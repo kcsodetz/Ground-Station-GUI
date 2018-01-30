@@ -391,7 +391,7 @@ def verifyMessageCallBack():
 def getAngle():
     this_angle_result = angleEntry.get()
     global angle_result
-    if len(angleEntry.get()) > 0:
+    if len(angleEntry.get()) > 0 and 30.0 <= float(this_angle_result) <= 75.0:
         angle_result = float(this_angle_result)
         if 30.0 <= angle_result <= 75.0:
             angleDataLabel.config(text=angle_result)
