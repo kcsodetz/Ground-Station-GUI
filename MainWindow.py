@@ -19,7 +19,8 @@ display all pertinent system data (data that can be changed) and environmental
 data (data that cannot be changed). 
 
 """
-# Set up GPIO pins for use
+
+# Set up GPIO pins for use, see documentation for pin layout
 
 # orange wire
 launch_signal = 11
