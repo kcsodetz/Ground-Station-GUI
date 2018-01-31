@@ -20,9 +20,12 @@ data (data that cannot be changed).
 """
 # Set up GPIO pins for use
 
-launch_signal = 37 #orange
-on_signal = 35 #yellow
-gui_switch = 7 #white
+# orange wire
+launch_signal = 37
+# yellow wire
+on_signal = 35
+# white wire
+gui_switch = 7
 
 GPIO.setmode(GPIO.BOARD)
 GPIO.setwarnings(False)
