@@ -21,9 +21,9 @@ data (data that cannot be changed).
 # Set up GPIO pins for use
 
 # orange wire
-launch_signal = 37
+launch_signal = 11
 # yellow wire
-on_signal = 35
+on_signal = 12
 # white wire
 gui_switch = 7
 
