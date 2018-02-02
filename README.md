@@ -12,7 +12,7 @@ Ensure Python3 is installed on your system. Python 3.6 is recommended.
 
 To check which version of Python 3 you have installed, run 
 
-'''
+```
 python3 --version
-'''
+```
 
