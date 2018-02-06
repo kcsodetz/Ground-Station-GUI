@@ -43,7 +43,7 @@ GPIO.output(gui_switch, GPIO.LOW)
 top = Tk()
 top.geometry("600x600")
 hxw = 600  # height and width of top frame
-top.title("Rocket GUI V 0.1")
+top.title("Ground Station Graphical User Interface V0.1")
 
 # ============================ #
 # ========== FRAMES ========== #
@@ -70,7 +70,7 @@ subFrameBottom.place(x=0, y=hxw - 285)
 # ============================ #
 
 # Text for 'About' menu item
-aboutText = "ROCKET GUI Version 0.1\n\n" \
+aboutText = "Ground Station Graphical User Interface Version 0.1\n\n" \
             "Author: Ken Sodetz\n" \
             "Since: 10/11/2017\n\n" \
             "Created for Purdue Orbital Electrical and Software Sub team\n\n" \
