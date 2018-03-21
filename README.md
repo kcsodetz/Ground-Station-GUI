@@ -4,7 +4,7 @@ A simple python graphical user interface for communication with the launch platf
 
 ## Getting Started
 
-These instructions will get you started for testing purposes. This software is currently in development and is not suitable for field use. 
+__Note:__ These instructions will get you started for testing purposes. This software is currently in development and is not suitable for field use. 
 
 ### Prerequisites
 
