@@ -418,8 +418,6 @@ def updateEnvironment():
 # ==== BUTTONS AND ENTRIES === #
 # ============================ #
 
-# Abort Mission Button
-
 # Info Text Line
 infoText = Label(subFrameBottom, fg="white", bg=bgColor, width=40)
 infoText.place(x=160, y=15)
@@ -441,6 +439,7 @@ def on_leave(event):
     infoText.config(text=" ")
 
 
+# Abort Mission Button
 abortButton = Button(subFrameBottom, text="ABORT MISSION", state=DISABLED, bg="red", command=abortMessageCallBack,
                      width="20")
 abortButton.place(x=100, y=55)
