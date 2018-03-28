@@ -32,7 +32,7 @@ This software also uses the RPi.GPIO library. It should be installed by default 
 The fastest way to get up and running is to clone the repository
 
 ```
-$ git clone https://github.com/kcsodetz/Ground-Station-GIU.git
+$ git clone https://github.com/purdue-orbital/Ground-Station-GUI.git.git
 ```
 
 ### Running
