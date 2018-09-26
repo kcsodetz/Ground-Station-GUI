@@ -2,7 +2,8 @@ import datetime
 import os
 import time
 import serial
-#import RPi.GPIO as GPIO
+# import RPi.GPIO as GPIO
+import UpdateVariables as uv
 from tkinter import *
 from tkinter import messagebox
 
@@ -23,9 +24,9 @@ data (data that cannot be changed).
 # Set up GPIO pins for use, see documentation for pin layout
 
 # orange wire
-launch_signal = 11
+launch_signal = 37
 # yellow wire
-on_signal = 12
+on_signal = 35
 # white wire
 gui_switch = 7
 
@@ -79,7 +80,7 @@ aboutText = "Ground Station Graphical User Interface Version 0.1\n\n" \
 
 
 # Temp menu item
-def doNothing():
+def do_nothing():
     file_window = Toplevel(top)
     button = Button(file_window, text="Close", command=lambda: close_window(file_window))
     button.pack()
@@ -89,8 +90,8 @@ def doNothing():
 def log_menu():
     log_window = Toplevel(top)
     log_window.title("Log")
-    loggedLabel = Label(log_window, text="The current variables have been logged in 'status_log.txt'")
-    loggedLabel.pack()
+    logged_label = Label(log_window, text="The current variables have been logged in 'status_log.txt'")
+    logged_label.pack()
     button = Button(log_window, text="Close", command=lambda: close_window(log_window))
     button.pack()
     log("MANUAL")
@@ -107,7 +108,7 @@ def about():
     text.pack()
     top.img = img = PhotoImage(file="PurdueOrbitalLogoSmall.gif")
     logo = Label(about_window, image=img)
-    logo.place(x=220, y=200)
+    logo.place(x=0, y=200)
     button = Button(about_window, text="Close", command=lambda: close_window(about_window))
     button.pack()
 
@@ -132,10 +133,10 @@ def reset_variables_window():
     if reset_window:
         log("RESET")
         reset_variables()
-        updateEnvironment()
+        update_environment()
         global verify_ok_to_launch
         verify_ok_to_launch = False
-        statusLabelChange("NOT VERIFIED")
+        status_label_change("NOT VERIFIED")
         abortButton.config(state=DISABLED)
 
 
@@ -160,6 +161,23 @@ def reset_variables():
     angle_result = "null"
 
 
+def set_env_variables(_temperature, _pressure, _humidity, _altitude, _direction, _acceleration, _velocity):
+    global temperature
+    temperature = _temperature
+    global pressure
+    pressure = _pressure
+    global humidity
+    humidity = _humidity
+    global altitude
+    altitude = _altitude
+    global direction
+    direction = _direction
+    global acceleration
+    acceleration = _acceleration
+    global velocity
+    velocity = _velocity
+
+
 # Menu Bar
 menuBar = Menu(top)
 
@@ -178,7 +196,7 @@ menuBar.add_cascade(label="Program", menu=programMenu)
 
 # Help Menu
 helpMenu = Menu(menuBar, tearoff=0)
-helpMenu.add_command(label="Help Index", command=doNothing)
+helpMenu.add_command(label="Help Index", command=do_nothing)
 helpMenu.add_separator()
 helpMenu.add_command(label="About", command=about)
 menuBar.add_cascade(label="Help", menu=helpMenu)
@@ -192,7 +210,7 @@ top.config(menu=menuBar)
 
 def log(status):
     fo = open("status_log.txt", "a")
-    currentDate = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
+    current_date = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
     if status == "ABORT":
         fo.write("-------MISSION ABORTED-------\n")
     elif status == "VERIFIED":
@@ -206,7 +224,7 @@ def log(status):
     else:
         fo.write("-----STATUS NOT VERIFIED-----\n")
 
-    fo.write("TIMESTAMP:" + currentDate + "\n")
+    fo.write("TIMESTAMP:" + current_date + "\n")
     fo.write("*****************************\n")
     fo.write("----------LOGS START---------\n")
     fo.write("temperature = " + repr(temperature) + "\n")
@@ -350,7 +368,7 @@ angleEntryLabel.place(x=40, y=230)
 # ============================ #
 
 # Function to change status label
-def statusLabelChange(change_to):
+def status_label_change(change_to):
     statusLabel.config(text=change_to)
     if change_to == "VERIFIED":
         statusLabel.config(fg="green")
@@ -361,14 +379,14 @@ def statusLabelChange(change_to):
 
 
 # Function to show abort message box
-def abortMessageCallBack():
+def abort_message_call_back():
     abort_response = messagebox.askyesno("Abort Mission?", "Do you really want to abort the mission?")
     if abort_response:
         global has_aborted
         has_aborted = True
         global verify_ok_to_launch
         verify_ok_to_launch = False
-        statusLabelChange("MISSION ABORTED")
+        status_label_change("MISSION ABORTED")
         abortButton.config(state=DISABLED)
         log("ABORT")
         # GPIO.output(gui_switch, GPIO.LOW)
@@ -377,23 +395,23 @@ def abortMessageCallBack():
 
 
 # Function to show verify message box
-def verifyMessageCallBack():
+def verify_message_call_back():
     verify_response = messagebox.askyesno("Verify Launch", "Do you want to verify for launch?")
     if verify_response:
         global verify_ok_to_launch
         verify_ok_to_launch = True
         abortButton.config(state=NORMAL)
-        statusLabelChange("VERIFIED")
+        status_label_change("VERIFIED")
         log("VERIFIED")
         # GPIO.output(gui_switch, GPIO.HIGH)
     else:
         verify_ok_to_launch = False
-        statusLabelChange("NOT VERIFIED")
+        status_label_change("NOT VERIFIED")
         abortButton.config(state=DISABLED)
         log("NOT")
 
 
-def getAngle():
+def get_angle():
     this_angle_result = angleEntry.get()
     global angle_result
     if len(angleEntry.get()) > 0 and 30.0 <= float(this_angle_result) <= 75.0:
@@ -403,7 +421,7 @@ def getAngle():
 
 
 # Function to update Environment Data
-def updateEnvironment():
+def update_environment():
     tempDataLabel.config(text=temperature)
     pressureDataLabel.config(text=pressure)
     humidityDataLabel.config(text=humidity)
@@ -441,14 +459,14 @@ def on_leave(event):
     infoText.config(text=" ")
 
 
-abortButton = Button(subFrameBottom, text="ABORT MISSION", state=DISABLED, bg="red", command=abortMessageCallBack,
+abortButton = Button(subFrameBottom, text="ABORT MISSION", state=DISABLED, bg="red", command=abort_message_call_back,
                      width="20")
 abortButton.place(x=100, y=55)
 abortButton.bind("<Enter>", on_enter_abort)
 abortButton.bind("<Leave>", on_leave)
 
 # Verify Launch Button
-verifyButton = Button(subFrameBottom, text="VERIFY LAUNCH", bg="green", command=verifyMessageCallBack, cursor="shuttle",
+verifyButton = Button(subFrameBottom, text="VERIFY LAUNCH", bg="green", command=verify_message_call_back, cursor="shuttle",
                       width="20")
 verifyButton.place(x=100, y=125)
 verifyButton.bind("<Enter>", on_enter_verify)
@@ -459,9 +477,13 @@ angleEntry = Entry(subFrameLeft, bd=5, bg=bgColor, fg="white", width=standardDat
 angleEntry.place(x=40, y=260)
 
 # Get Angle Input Button
-angleInputButton = Button(subFrameLeft, text="ENTER", width=8, command=getAngle)
+angleInputButton = Button(subFrameLeft, text="ENTER", width=8, command=get_angle)
 angleInputButton.place(x=160, y=260)
 
-# Start window
-top.mainloop()
-# GPIO.cleanup()
+
+# Main method
+if __name__ == '__main__':
+    # Start window
+    top.after(2000, uv.test, top)
+    top.mainloop()
+    # GPIO.cleanup()
