@@ -42,7 +42,7 @@ $ cd Ground-Station-GUI
 $ python3 Mainwindow.py
 ```
 
-This will get the GUI running. However, to get the full functionality of the system, you will need to hook up the appropriate wires to the correct GPIO pins on the Raspberry Pi. Tutorial coming soon.
+This will get the GUI running. However, to get the full functionality of the system, you will need to hook up the appropriate wires to the correct GPIO pins on the Raspberry Pi 3B.
 
 ### Hardware Connections
 
