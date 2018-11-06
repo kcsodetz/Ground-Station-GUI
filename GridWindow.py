@@ -15,8 +15,8 @@ Since: 10/31/2018
 Created for Purdue Orbital Electrical and Software Sub team
 
 Parses and displays data from the a Raspberry Pi 3 to verbosely
-display all pertinent system data (data that can be changed) and environmental 
-data (data that cannot be changed). 
+display all pertinent system data (data that can be changed) and environmental
+data (data that cannot be changed).
 
 """
 
@@ -30,23 +30,31 @@ class MyWindow:
         self.FrameColor = "#3C3F41"
 
         name.title("Ground Station Graphical User Interface V0.2")
-        name.iconbitmap('MyOrbital.ico')
+        #name.iconbitmap('MyOrbital.ico')
         # name.configure(background=self.bg)
 
         window_geometry = str(self.width) + 'x' + str(self.height)
         self.name.geometry(window_geometry)
 
         # Environment Data
-        self.temperature = 55
-        self.pressure = 123
-        self.humidity = 42
+        self.temperature = StringVar()
+        self.temperature.set(0)
+        self.pressure = StringVar()
+        self.pressure.set(0)
+        self.humidity = StringVar()
+        self.humidity.set(0)
 
         # System Data
-        self.altitude = 15000000000
-        self.direction = 36
-        self.acceleration = 3.06
-        self.velocity = 5.01
-        self.user_angle = 55.07
+        self.altitude = StringVar()
+        self.altitude.set(15000000)
+        self.direction = StringVar()
+        self.direction.set(0)
+        self.acceleration = StringVar()
+        self.acceleration.set(0)
+        self.velocity = StringVar()
+        self.velocity.set(0)
+        self.user_angle = StringVar()
+        self.user_angle.set(0)
 
         self.make_tool_bar()
 
@@ -93,15 +101,15 @@ class MyWindow:
 
     def update_variables(self):
 
-        temperature_data = Label(self.name, text=self.temperature)
-        pressure_data = Label(self.name, text=self.pressure)
-        humidity_data = Label(self.name, text=self.humidity)
+        temperature_data = Label(self.name, textvariable=self.temperature)
+        pressure_data = Label(self.name, textvariable=self.pressure)
+        humidity_data = Label(self.name, textvariable=self.humidity)
 
-        altitude_data = Label(self.name, text=self.altitude)
-        direction_data = Label(self.name, text=self.direction)
-        acceleration_data = Label(self.name, text=self.acceleration)
-        velocity_data = Label(self.name, text=self.velocity)
-        angle_data = Label(self.name, text=self.user_angle)
+        altitude_data = Label(self.name, textvariable=self.altitude, width=15)
+        direction_data = Label(self.name, textvariable=self.direction)
+        acceleration_data = Label(self.name, textvariable=self.acceleration)
+        velocity_data = Label(self.name, textvariable=self.velocity)
+        angle_data = Label(self.name, textvariable=self.user_angle)
 
         temperature_data.grid(row=1, column=3)
         pressure_data.grid(row=2, column=3)
@@ -128,9 +136,9 @@ class MyWindow:
         humidity_label.grid(row=3, column=1)
 
         # Place Data Across from Corresponding Label
-        temperature_data = Label(self.name, text=self.temperature)
-        pressure_data = Label(self.name, text=self.pressure)
-        humidity_data = Label(self.name, text=self.humidity)
+        temperature_data = Label(self.name, textvariable=self.temperature)
+        pressure_data = Label(self.name, textvariable=self.pressure)
+        humidity_data = Label(self.name, textvariable=self.humidity)
 
         temperature_data.grid(row=1, column=3)
         pressure_data.grid(row=2, column=3)
@@ -155,11 +163,11 @@ class MyWindow:
         angle_label.grid(row=5, column=5)
 
         # Place Data Across from Corresponding Label
-        altitude_data = Label(self.name, text=self.altitude)
-        direction_data = Label(self.name, text=self.direction)
-        acceleration_data = Label(self.name, text=self.acceleration)
-        velocity_data = Label(self.name, text=self.velocity)
-        angle_data = Label(self.name, text=self.user_angle)
+        altitude_data = Label(self.name, textvariable=self.altitude)
+        direction_data = Label(self.name, textvariable=self.direction)
+        acceleration_data = Label(self.name, textvariable=self.acceleration)
+        velocity_data = Label(self.name, textvariable=self.velocity)
+        angle_data = Label(self.name, textvariable=self.user_angle)
 
         altitude_data.grid(row=1, column=7)
         direction_data.grid(row=2, column=7)
@@ -220,17 +228,17 @@ class MyWindow:
         # Resets all of the data on screen to zero
 
         # GPIO.output(self.gui_switch, GPIO.LOW)
-        self.temperature = 0.0
-        self.pressure = 0.0
-        self.humidity = 0.0
+        self.temperature.set(100)
+        self.pressure.set(100)
+        self.humidity.set(100)
 
-        self.altitude = 0.0
-        self.direction = 0.0
-        self.acceleration = 0.0
-        self.velocity = 0.0
-        self.user_angle = "null"
+        self.altitude.set(100)
+        self.direction.set(100)
+        self.acceleration.set(100)
+        self.velocity.set(100)
+        self.user_angle.set("null")
 
-        self.update_variables()
+        #self.update_variables()
 
 
 root = Tk()
