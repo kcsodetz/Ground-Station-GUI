@@ -3,6 +3,7 @@ from tkinter import messagebox
 import datetime
 import time
 import os
+from enum import Enum
 # import serial
 # import RPi.GPIO as GPIO
 
@@ -19,6 +20,15 @@ display all pertinent system data (data that can be changed) and environmental
 data (data that cannot be changed).
 
 """
+
+
+class status(Enum):
+    ABORT = "MISSION ABORTED"
+    VERIFIED = "STATUS VERIFIED"
+    NOTVERIFIED = "STATUS NOT VERIFIED"
+    MANUAL = "MANUAL LOG INVOKED"
+    RESET = "VARIABLES RESET"
+    RESTART = "PROGRAM RESTART"
 
 
 class MyWindow:
@@ -38,23 +48,23 @@ class MyWindow:
 
         # Environment Data
         self.temperature = StringVar()
-        self.temperature.set(0)
+        self.temperature.set(15000.0)
         self.pressure = StringVar()
-        self.pressure.set(0)
+        self.pressure.set(6000.0)
         self.humidity = StringVar()
-        self.humidity.set(0)
+        self.humidity.set(10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000.0)
 
         # System Data
         self.altitude = StringVar()
         self.altitude.set(15000000)
         self.direction = StringVar()
-        self.direction.set(0)
+        self.direction.set(.1234)
         self.acceleration = StringVar()
-        self.acceleration.set(0)
+        self.acceleration.set(90)
         self.velocity = StringVar()
-        self.velocity.set(0)
+        self.velocity.set(12)
         self.user_angle = StringVar()
-        self.user_angle.set(0)
+        self.user_angle.set(458)
 
         self.make_tool_bar()
 
@@ -98,28 +108,6 @@ class MyWindow:
 
         for row in my_rows:
             self.name.rowconfigure(row, weight=1, uniform=1)
-
-    def update_variables(self):
-
-        temperature_data = Label(self.name, textvariable=self.temperature)
-        pressure_data = Label(self.name, textvariable=self.pressure)
-        humidity_data = Label(self.name, textvariable=self.humidity)
-
-        altitude_data = Label(self.name, textvariable=self.altitude, width=15)
-        direction_data = Label(self.name, textvariable=self.direction)
-        acceleration_data = Label(self.name, textvariable=self.acceleration)
-        velocity_data = Label(self.name, textvariable=self.velocity)
-        angle_data = Label(self.name, textvariable=self.user_angle)
-
-        temperature_data.grid(row=1, column=3)
-        pressure_data.grid(row=2, column=3)
-        humidity_data.grid(row=3, column=3)
-
-        altitude_data.grid(row=1, column=7)
-        direction_data.grid(row=2, column=7)
-        acceleration_data.grid(row=3, column=7)
-        velocity_data.grid(row=4, column=7)
-        angle_data.grid(row=5, column=7)
 
     def make_environmental_section(self):
         # Create and Place Section Header
@@ -178,17 +166,17 @@ class MyWindow:
     def log(self, status):
         fo = open("status_log.txt", "a")
         current_date = datetime.datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
-        if status == "ABORT":
+        if status == status.ABORT:
             fo.write("-------MISSION ABORTED-------\n")
-        elif status == "VERIFIED":
+        elif status == status.VERIFIED:
             fo.write("-------STATUS VERIFIED-------\n")
-        elif status == "MANUAL":
+        elif status == status.MANUAL:
             fo.write("-----MANUAL LOG INVOKED------\n")
-        elif status == "RESET":
+        elif status == status.RESET:
             fo.write("-------VARIABLES RESET-------\n")
-        elif status == "RESTART":
+        elif status == status.RESTART:
             fo.write("-------PROGRAM RESTART-------\n")
-        else:
+        elif status == status.NOTVERIFIED:
             fo.write("-----STATUS NOT VERIFIED-----\n")
 
         fo.write("TIMESTAMP:" + current_date + "\n")
@@ -201,7 +189,6 @@ class MyWindow:
         fo.write("direction = " + repr(self.direction) + "\n")
         fo.write("acceleration = " + repr(self.acceleration) + "\n")
         fo.write("velocity = " + repr(self.velocity) + "\n")
-        # fo.write("horizontalAngle = " + repr(self.angle_result) + "\n")
         fo.write("----------LOGS END-----------\n")
         fo.write("-----------------------------\n\n")
         fo.close()
@@ -210,7 +197,7 @@ class MyWindow:
         python = sys.executable
         # GPIO.output(self.gui_switch, GPIO.LOW)
         # GPIO.cleanup()
-        self.log("RESTART")
+        self.log(status.RESTART)
         os.execl(python, python, *sys.argv)
 
     def reset_variables_window(self):
@@ -218,7 +205,7 @@ class MyWindow:
         # If yes then all the variables are reset
         reset_window = messagebox.askokcancel("Reset All Variables?", "Are you sure you want to reset all variables?")
         if reset_window:
-            self.log("RESET")
+            self.log(status.RESET)
             self.reset_variables()
             # self.verify_ok_to_launch = False
             # self.status_label_change("NOT VERIFIED")
@@ -228,18 +215,15 @@ class MyWindow:
         # Resets all of the data on screen to zero
 
         # GPIO.output(self.gui_switch, GPIO.LOW)
-        self.temperature.set(100)
-        self.pressure.set(100)
-        self.humidity.set(100)
+        self.temperature.set(0.0)
+        self.pressure.set(0.0)
+        self.humidity.set(0.0)
 
-        self.altitude.set(100)
-        self.direction.set(100)
-        self.acceleration.set(100)
-        self.velocity.set(100)
+        self.altitude.set(0.0)
+        self.direction.set(0.0)
+        self.acceleration.set(0.0)
+        self.velocity.set(0.0)
         self.user_angle.set("null")
-
-        #self.update_variables()
-
 
 root = Tk()
 window = MyWindow(root)
